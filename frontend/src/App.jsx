@@ -26,7 +26,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="app__title">Steam Library Total</h1>
+      <h1 className="app__title">Steamspent</h1>
       <p className="app__subtitle">
         Masukkan username Steam, lihat berapa total kalau semua game di
         library-mu dibeli dengan harga penuh hari ini.
