@@ -135,7 +135,7 @@ body {
 .receipt__item {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
   padding: 10px 0;
   border-bottom: 1px solid var(--border);
@@ -145,7 +145,17 @@ body {
   border-bottom: none;
 }
 
+.receipt__item-cover {
+  width: 46px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: var(--surface-raised);
+}
+
 .receipt__item-name {
+  flex: 1;
   font-size: 0.9rem;
   overflow: hidden;
   text-overflow: ellipsis;

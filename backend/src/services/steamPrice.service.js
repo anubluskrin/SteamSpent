@@ -67,6 +67,7 @@ export async function getPricesForGames(games) {
         : null,
       currency: priceData.currency,
       isFree: priceData.isFree,
+      coverUrl: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
     });
   }
 

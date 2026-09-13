@@ -20,6 +20,15 @@ export default function Receipt({ result }) {
       <div className="receipt__items">
         {games.map((game) => (
           <div className="receipt__item" key={game.appid}>
+            <img
+              src={game.coverUrl}
+              alt={game.name}
+              className="receipt__item-cover"
+              loading="lazy"
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
             <span className="receipt__item-name">{game.name}</span>
             <span
               className={
