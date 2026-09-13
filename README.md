@@ -10,7 +10,7 @@ Aplikasi web yang menghitung total harga penuh (tanpa diskon) dari seluruh game 
 - Menampilkan daftar game beserta cover, harga normal, dan harga setelah diskon (kalau ada)
 - Total harga keseluruhan library
 - Caching harga game di database (mengurangi beban ke Steam Store API)
-- Loading state animasi bertema struk belanja
+- Loading state
 
 ## Tech Stack
 
