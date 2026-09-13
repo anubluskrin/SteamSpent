@@ -1,4 +1,5 @@
 {
+  "buildCommand": "prisma generate",
   "functions": {
     "api/**/*.js": {
       "maxDuration": 30
