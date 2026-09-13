@@ -1,4 +1,4 @@
-import { prisma } from "../config/db.js";
+import { prisma } from "../../lib/prisma.js";
 
 const CACHE_TTL_HOURS = 24;
 
