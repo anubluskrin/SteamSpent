@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Cache harga game, supaya tidak fetch Steam Store API tiap kali ada request
+model Game {
+  appid          Int      @id
+  name           String
+  price          Decimal  @default(0)
+  discountPrice  Decimal? @map("discount_price")
+  currency       String   @default("IDR")
+  isFree         Boolean  @default(false) @map("is_free")
+  lastUpdated    DateTime @default(now()) @map("last_updated")
+
+  @@map("games")
+}
+
+// Riwayat pencarian user (opsional, untuk analytics nanti)
+model SearchLog {
+  id          Int      @id @default(autoincrement())
+  steamId64   String   @map("steamid64")
+  vanityName  String?  @map("vanity_name")
+  totalPrice  Decimal  @map("total_price")
+  searchedAt  DateTime @default(now()) @map("searched_at")
+
+  @@map("search_logs")
+}
