@@ -1,4 +1,4 @@
-# Steam Library Total
+# Steamspent
 
 Aplikasi web yang menghitung total harga penuh (tanpa diskon) dari seluruh game di library Steam seorang user, cukup dengan input username/link profil Steam.
 
