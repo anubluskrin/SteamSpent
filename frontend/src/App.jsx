@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SearchForm from "./components/SearchForm.jsx";
 import Receipt from "./components/Receipt.jsx";
+import LoadingReceipt from "./components/LoadingReceipt.jsx";
 import { calculateLibraryPrice } from "./services/api.js";
 
 export default function App() {
@@ -33,9 +34,7 @@ export default function App() {
 
       <SearchForm onSearch={handleSearch} isLoading={isLoading} />
 
-      {isLoading && (
-        <p className="state-message">Mengambil data library…</p>
-      )}
+      {isLoading && <LoadingReceipt />}
 
       {error && (
         <p className="state-message state-message--error">{error}</p>
