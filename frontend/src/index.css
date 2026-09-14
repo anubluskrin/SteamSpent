@@ -58,6 +58,14 @@ body {
   margin-bottom: 32px;
 }
 
+.app__hint {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin: -20px 0 32px;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
 .search-form input {
   flex: 1;
   background: var(--surface);

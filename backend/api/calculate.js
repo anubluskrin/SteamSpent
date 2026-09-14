@@ -50,7 +50,10 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     if (err.message === "USERNAME_NOT_FOUND") {
-      return res.status(404).json({ error: "Username Steam tidak ditemukan" });
+      return res.status(404).json({
+        error:
+          "Username tidak ditemukan. Kalau ini nama tampilan (bukan link), coba paste link profil Steam kamu, contoh: steamcommunity.com/profiles/7656...",
+      });
     }
     if (err.message === "LIBRARY_EMPTY_OR_PRIVATE") {
       return res

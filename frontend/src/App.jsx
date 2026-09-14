@@ -26,13 +26,18 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="app__title">Steamspent</h1>
+      <h1 className="app__title">Steam Library Total</h1>
       <p className="app__subtitle">
         Masukkan username Steam, lihat berapa total kalau semua game di
         library-mu dibeli dengan harga penuh hari ini.
       </p>
 
       <SearchForm onSearch={handleSearch} isLoading={isLoading} />
+
+      <p className="app__hint">
+        Tidak punya link custom (steamcommunity.com/id/...)? Paste saja link
+        profil Steam kamu apa adanya.
+      </p>
 
       {isLoading && <LoadingReceipt />}
 
