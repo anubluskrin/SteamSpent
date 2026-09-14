@@ -224,6 +224,14 @@ body {
   color: var(--error);
 }
 
+.state-message__link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
 /* Loading receipt */
 .loading-receipt {
   display: flex;

@@ -42,7 +42,19 @@ export default function App() {
       {isLoading && <LoadingReceipt />}
 
       {error && (
-        <p className="state-message state-message--error">{error}</p>
+        <div className="state-message state-message--error">
+          <p>{error}</p>
+          {error.includes("tidak ditemukan") && (
+            <a
+              href="https://steamcommunity.com/my/edit/info"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="state-message__link"
+            >
+              Atur custom URL di Steam →
+            </a>
+          )}
+        </div>
       )}
 
       {result && !isLoading && <Receipt result={result} />}
