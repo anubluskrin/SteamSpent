@@ -7,8 +7,30 @@ function formatPrice(value, currency) {
   }).format(value);
 }
 
+function computeStats(games, totalGames, totalPrice) {
+  const freeCount = games.filter((g) => g.price === 0).length;
+  const paidGames = games.filter((g) => g.price > 0);
+
+  const mostExpensive = games.reduce(
+    (max, g) => (g.price > (max?.price ?? -1) ? g : max),
+    null
+  );
+
+  const average =
+    paidGames.length > 0
+      ? paidGames.reduce((sum, g) => sum + g.price, 0) / paidGames.length
+      : 0;
+
+  return { freeCount, mostExpensive, average };
+}
+
 export default function Receipt({ result }) {
   const { username, totalGames, totalPrice, currency, games } = result;
+  const { freeCount, mostExpensive, average } = computeStats(
+    games,
+    totalGames,
+    totalPrice
+  );
 
   return (
     <div className="receipt">
@@ -53,6 +75,32 @@ export default function Receipt({ result }) {
           Harga sebelum diskon, kurs mengikuti harga toko Steam
         </div>
       </div>
+
+      {mostExpensive && (
+        <div className="receipt__stats">
+          <div className="receipt__stat">
+            <span className="receipt__stat-label">Game termahal</span>
+            <span className="receipt__stat-value">
+              {mostExpensive.name} —{" "}
+              {formatPrice(mostExpensive.price, currency)}
+            </span>
+          </div>
+          <div className="receipt__stat">
+            <span className="receipt__stat-label">
+              Rata-rata harga (game berbayar)
+            </span>
+            <span className="receipt__stat-value">
+              {formatPrice(Math.round(average), currency)}
+            </span>
+          </div>
+          <div className="receipt__stat">
+            <span className="receipt__stat-label">Game gratis</span>
+            <span className="receipt__stat-value">
+              {freeCount} dari {totalGames} game
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
