@@ -282,28 +282,28 @@ body {
   font-family: var(--font-mono);
 }
 
-.receipt__download-btn {
-  display: block;
-  width: 100%;
-  margin-top: 16px;
-  padding: 12px;
+.receipt__toggle {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.receipt__toggle-btn {
+  flex: 1;
+  padding: 7px 10px;
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 
-.receipt__download-btn:hover:not(:disabled) {
+.receipt__toggle-btn.is-active {
   border-color: var(--accent);
   color: var(--accent);
-}
-
-.receipt__download-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .receipt__stat-name {
