@@ -72,7 +72,8 @@ export default function Receipt({ result }) {
           </span>
         </div>
         <div className="receipt__total-note">
-          Harga sebelum diskon, kurs mengikuti harga toko Steam
+          Estimasi kalau semua game ini dibeli ulang dari nol hari ini —
+          bukan harga waktu kamu beli dulu
         </div>
       </div>
 
@@ -81,8 +82,12 @@ export default function Receipt({ result }) {
           <div className="receipt__stat">
             <span className="receipt__stat-label">Game termahal</span>
             <span className="receipt__stat-value">
-              {mostExpensive.name} —{" "}
-              {formatPrice(mostExpensive.price, currency)}
+              <span className="receipt__stat-name">
+                {mostExpensive.name}
+              </span>{" "}
+              <span className="receipt__stat-price">
+                {formatPrice(mostExpensive.price, currency)}
+              </span>
             </span>
           </div>
           <div className="receipt__stat">

@@ -26,10 +26,10 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="app__title">Steam Library Total</h1>
+      <h1 className="app__title">Steamspent</h1>
       <p className="app__subtitle">
-        Masukkan username Steam, lihat berapa total kalau semua game di
-        library-mu dibeli dengan harga penuh hari ini.
+        Seandainya kamu beli ulang semua game di library Steam-mu hari ini,
+        dari nol, berapa totalnya? Masukkan username buat cari tau.
       </p>
 
       <SearchForm onSearch={handleSearch} isLoading={isLoading} />
