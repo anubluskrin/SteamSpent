@@ -1,3 +1,6 @@
+import { useRef, useState } from "react";
+import html2canvas from "html2canvas";
+
 function formatPrice(value, currency) {
   if (value === 0) return "GRATIS";
   return new Intl.NumberFormat("id-ID", {
@@ -5,6 +8,18 @@ function formatPrice(value, currency) {
     currency: currency || "IDR",
     minimumFractionDigits: 0,
   }).format(value);
+}
+
+function getDiscountPercent(game) {
+  if (
+    game.isFree ||
+    !game.discountPrice ||
+    game.discountPrice >= game.price ||
+    game.price === 0
+  ) {
+    return null;
+  }
+  return Math.round((1 - game.discountPrice / game.price) * 100);
 }
 
 function computeStats(games, totalGames, totalPrice) {
@@ -31,37 +46,93 @@ export default function Receipt({ result }) {
     totalGames,
     totalPrice
   );
+  const receiptRef = useRef(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  async function handleDownload() {
+    if (!receiptRef.current) return;
+    setIsDownloading(true);
+
+    const itemsEl = receiptRef.current.querySelector(".receipt__items");
+    const originalMaxHeight = itemsEl?.style.maxHeight;
+    const originalOverflow = itemsEl?.style.overflow;
+
+    try {
+      // Buka sementara area scroll-nya supaya seluruh daftar game
+      // ikut terfoto, bukan cuma bagian yang kelihatan di layar
+      if (itemsEl) {
+        itemsEl.style.maxHeight = "none";
+        itemsEl.style.overflow = "visible";
+      }
+
+      const canvas = await html2canvas(receiptRef.current, {
+        backgroundColor: "#14181d",
+        scale: 2,
+      });
+      const link = document.createElement("a");
+      link.download = `steam-library-${username}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch {
+      // Diamkan saja — download gambar itu fitur pelengkap, bukan inti
+    } finally {
+      if (itemsEl) {
+        itemsEl.style.maxHeight = originalMaxHeight ?? "";
+        itemsEl.style.overflow = originalOverflow ?? "";
+      }
+      setIsDownloading(false);
+    }
+  }
 
   return (
-    <div className="receipt">
+    <div>
+      <div className="receipt" ref={receiptRef}>
       <div className="receipt__header">
         <div className="receipt__username">{username}</div>
         <div className="receipt__count">{totalGames} game di library</div>
       </div>
 
       <div className="receipt__items">
-        {games.map((game) => (
-          <div className="receipt__item" key={game.appid}>
-            <img
-              src={game.coverUrl}
-              alt={game.name}
-              className="receipt__item-cover"
-              loading="lazy"
-              onError={(e) => {
-                e.target.style.visibility = "hidden";
-              }}
-            />
-            <span className="receipt__item-name">{game.name}</span>
-            <span
-              className={
-                "receipt__item-price" +
-                (game.isFree ? " receipt__item-price--free" : "")
-              }
-            >
-              {formatPrice(game.price, game.currency)}
-            </span>
-          </div>
-        ))}
+        {games.map((game) => {
+          const discountPercent = getDiscountPercent(game);
+          return (
+            <div className="receipt__item" key={game.appid}>
+              <img
+                src={game.coverUrl}
+                alt={game.name}
+                className="receipt__item-cover"
+                loading="lazy"
+                onError={(e) => {
+                  e.target.style.visibility = "hidden";
+                }}
+              />
+              <span className="receipt__item-name">{game.name}</span>
+              {discountPercent && (
+                <span className="receipt__item-discount">
+                  -{discountPercent}%
+                </span>
+              )}
+              <span className="receipt__item-price-group">
+                {discountPercent && (
+                  <span className="receipt__item-price-original">
+                    {formatPrice(game.price, game.currency)}
+                  </span>
+                )}
+                <span
+                  className={
+                    "receipt__item-price" +
+                    (game.isFree ? " receipt__item-price--free" : "")
+                  }
+                >
+                  {formatPrice(
+                    discountPercent ? game.discountPrice : game.price,
+                    game.currency
+                  )}
+                </span>
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <div className="receipt__total">
@@ -106,6 +177,15 @@ export default function Receipt({ result }) {
           </div>
         </div>
       )}
+      </div>
+
+      <button
+        className="receipt__download-btn"
+        onClick={handleDownload}
+        disabled={isDownloading}
+      >
+        {isDownloading ? "Menyiapkan gambar…" : "⬇ Download sebagai gambar"}
+      </button>
     </div>
   );
 }

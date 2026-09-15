@@ -185,6 +185,32 @@ body {
   white-space: nowrap;
 }
 
+.receipt__item-discount {
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.receipt__item-price-group {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.receipt__item-price-original {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
 .receipt__item-price {
   font-family: var(--font-mono);
   font-size: 0.9rem;
@@ -254,6 +280,30 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: var(--font-mono);
+}
+
+.receipt__download-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.receipt__download-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.receipt__download-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .receipt__stat-name {
