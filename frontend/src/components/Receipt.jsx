@@ -48,7 +48,7 @@ export default function Receipt({ result }) {
               className="receipt__item-cover"
               loading="lazy"
               onError={(e) => {
-                e.target.style.display = "none";
+                e.target.style.visibility = "hidden";
               }}
             />
             <span className="receipt__item-name">{game.name}</span>
@@ -103,4 +103,3 @@ export default function Receipt({ result }) {
       )}
     </div>
   );
-}

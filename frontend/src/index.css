@@ -138,6 +138,21 @@ body {
   padding: 8px 24px;
   max-height: 420px;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.receipt__items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.receipt__items::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.receipt__items::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 3px;
 }
 
 .receipt__item {
