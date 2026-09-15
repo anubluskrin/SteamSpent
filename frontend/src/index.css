@@ -227,7 +227,7 @@ body {
 }
 
 .receipt__stats {
-  margin-top: 16px;
+  margin: 16px 24px 20px;
   padding-top: 16px;
   border-top: 1px dashed var(--border);
   display: flex;
@@ -254,6 +254,15 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: var(--font-mono);
+}
+
+.receipt__stat-name {
+  font-family: var(--font-body);
+}
+
+.receipt__stat-price {
+  font-family: var(--font-mono);
+  color: var(--accent);
 }
 
 /* States */
