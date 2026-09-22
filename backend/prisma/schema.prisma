@@ -30,3 +30,19 @@ model SearchLog {
 
   @@map("search_logs")
 }
+
+// Riwayat harga tiap game dari waktu ke waktu (untuk analisis tren/diskon)
+// Beda dari tabel `games` yang cuma simpan harga TERAKHIR (ditimpa terus),
+// tabel ini nambah baris baru tiap kali harga beneran di-fetch ulang dari Steam.
+model PriceHistory {
+  id             Int      @id @default(autoincrement())
+  appid          Int
+  price          Decimal
+  discountPrice  Decimal? @map("discount_price")
+  currency       String
+  isFree         Boolean  @default(false) @map("is_free")
+  recordedAt     DateTime @default(now()) @map("recorded_at")
+
+  @@index([appid, recordedAt])
+  @@map("price_history")
+}
