@@ -66,6 +66,139 @@ body {
   opacity: 0.75;
 }
 
+.app__stats-trigger {
+  display: block;
+  margin: 32px auto 0;
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.app__stats-trigger:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.stats-panel {
+  margin-top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.stats-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.stats-panel__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.stats-panel__close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.stats-panel__close:hover {
+  color: var(--accent);
+}
+
+.stats-panel__summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stats-panel__summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stats-panel__summary-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stats-panel__summary-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.stats-panel__section {
+  margin-top: 20px;
+}
+
+.stats-panel__section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 10px;
+}
+
+.stats-panel__bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+}
+
+.stats-panel__bar-label {
+  width: 76px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.stats-panel__bar-label--name {
+  width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats-panel__bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--surface-raised);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stats-panel__bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.3s ease-out;
+}
+
+.stats-panel__bar-count {
+  width: 32px;
+  flex-shrink: 0;
+  text-align: right;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
 .search-form input {
   flex: 1;
   background: var(--surface);
