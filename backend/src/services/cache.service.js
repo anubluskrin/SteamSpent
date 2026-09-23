@@ -58,3 +58,18 @@ export async function savePriceToCache(appid, name, priceData) {
 
   return game;
 }
+
+/**
+ * Naikkan counter "berapa kali game ini muncul di hasil pencarian siapapun".
+ * Dipanggil untuk SETIAP game yang diproses, baik dari cache maupun fetch baru —
+ * jadi ini murni penanda popularitas, terpisah dari urusan cache harga.
+ * Sengaja "fire and forget" (gagal pun tidak menggagalkan request utama).
+ */
+export async function incrementTimesSeen(appid) {
+  return prisma.game
+    .update({
+      where: { appid },
+      data: { timesSeen: { increment: 1 } },
+    })
+    .catch(() => {});
+}
