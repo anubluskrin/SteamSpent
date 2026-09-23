@@ -1,5 +1,9 @@
 import axios from "axios";
-import { getCachedPrice, savePriceToCache } from "./cache.service.js";
+import {
+  getCachedPrice,
+  savePriceToCache,
+  incrementTimesSeen,
+} from "./cache.service.js";
 
 const STORE_URL = "https://store.steampowered.com/api/appdetails";
 const BATCH_SIZE = 10; // jumlah game yang diproses bersamaan per batch
@@ -55,6 +59,8 @@ async function processGame(game) {
     await savePriceToCache(game.appid, game.name, priceData);
     wasFetchedFresh = true;
   }
+
+  incrementTimesSeen(game.appid); // tidak di-await, tidak menghambat response utama
 
   return {
     result: {
