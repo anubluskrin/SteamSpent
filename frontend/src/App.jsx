@@ -2,12 +2,14 @@ import { useState } from "react";
 import SearchForm from "./components/SearchForm.jsx";
 import Receipt from "./components/Receipt.jsx";
 import LoadingReceipt from "./components/LoadingReceipt.jsx";
+import StatsPanel from "./components/StatsPanel.jsx";
 import { calculateLibraryPrice } from "./services/api.js";
 
 export default function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showStats, setShowStats] = useState(false);
 
   async function handleSearch(username) {
     setIsLoading(true);
@@ -26,10 +28,10 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="app__title">Steamspent</h1>
+      <h1 className="app__title">Steam Library Total</h1>
       <p className="app__subtitle">
         Seandainya kamu beli ulang semua game di library Steam-mu hari ini,
-        dari nol, berapa totalnya? Masukkan username buat cari tau.
+        dari nol — berapa totalnya? Masukkan username buat cari tau.
       </p>
 
       <SearchForm onSearch={handleSearch} isLoading={isLoading} />
@@ -58,6 +60,17 @@ export default function App() {
       )}
 
       {result && !isLoading && <Receipt result={result} />}
+
+      {!showStats && (
+        <button
+          className="app__stats-trigger"
+          onClick={() => setShowStats(true)}
+        >
+          📊 Lihat statistik komunitas
+        </button>
+      )}
+
+      {showStats && <StatsPanel onClose={() => setShowStats(false)} />}
     </div>
   );
 }
