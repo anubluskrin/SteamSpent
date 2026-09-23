@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // Cache harga game, supaya tidak fetch Steam Store API tiap kali ada request
@@ -16,6 +17,7 @@ model Game {
   currency       String   @default("IDR")
   isFree         Boolean  @default(false) @map("is_free")
   lastUpdated    DateTime @default(now()) @map("last_updated")
+  timesSeen      Int      @default(0) @map("times_seen")
 
   @@map("games")
 }
