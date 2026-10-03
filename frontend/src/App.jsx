@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Landing from "./components/Landing.jsx";
 import SearchForm from "./components/SearchForm.jsx";
 import Receipt from "./components/Receipt.jsx";
 import LoadingReceipt from "./components/LoadingReceipt.jsx";
@@ -6,6 +7,7 @@ import StatsPanel from "./components/StatsPanel.jsx";
 import { calculateLibraryPrice } from "./services/api.js";
 
 export default function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +26,10 @@ export default function App() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  if (showLanding) {
+    return <Landing onEnter={() => setShowLanding(false)} />;
   }
 
   return (
