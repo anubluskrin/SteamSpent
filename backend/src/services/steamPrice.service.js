@@ -6,8 +6,8 @@ import {
 } from "./cache.service.js";
 
 const STORE_URL = "https://store.steampowered.com/api/appdetails";
-const BATCH_SIZE = 10; // jumlah game yang diproses bersamaan per batch
-const BATCH_DELAY_MS = 200; // jeda antar batch (bukan antar game satu-satu lagi)
+const BATCH_SIZE = 20; // jumlah game yang diproses bersamaan per batch
+const BATCH_DELAY_MS = 120; // jeda antar batch (bukan antar game satu-satu lagi)
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

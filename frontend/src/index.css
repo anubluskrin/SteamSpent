@@ -37,6 +37,64 @@ body {
   max-width: 480px;
 }
 
+@media (min-width: 720px) {
+  .app {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app {
+    max-width: 900px;
+  }
+
+  .app__title {
+    font-size: 2rem;
+  }
+
+  .app__subtitle {
+    font-size: 1rem;
+    max-width: 560px;
+  }
+}
+
+.app__body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.app__placeholder {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+@media (min-width: 1024px) {
+  .app__body {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .app__main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .app__side {
+    width: 320px;
+    flex-shrink: 0;
+  }
+
+  .app__stats-trigger {
+    margin: 0;
+    width: 100%;
+  }
+}
+
 .app__title {
   font-size: 1.5rem;
   font-weight: 700;

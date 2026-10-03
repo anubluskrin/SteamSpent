@@ -41,36 +41,48 @@ export default function App() {
         profil Steam kamu apa adanya.
       </p>
 
-      {isLoading && <LoadingReceipt />}
+      <div className="app__body">
+        <div className="app__main">
+          {isLoading && <LoadingReceipt />}
 
-      {error && (
-        <div className="state-message state-message--error">
-          <p>{error}</p>
-          {error.includes("tidak ditemukan") && (
-            <a
-              href="https://steamcommunity.com/my/edit/info"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="state-message__link"
-            >
-              Atur custom URL di Steam →
-            </a>
+          {error && (
+            <div className="state-message state-message--error">
+              <p>{error}</p>
+              {error.includes("tidak ditemukan") && (
+                <a
+                  href="https://steamcommunity.com/my/edit/info"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="state-message__link"
+                >
+                  Atur custom URL di Steam →
+                </a>
+              )}
+            </div>
+          )}
+
+          {result && !isLoading && <Receipt result={result} />}
+
+          {!result && !isLoading && !error && (
+            <div className="app__placeholder">
+              Hasil pencarian akan muncul di sini
+            </div>
           )}
         </div>
-      )}
 
-      {result && !isLoading && <Receipt result={result} />}
+        <div className="app__side">
+          {!showStats && (
+            <button
+              className="app__stats-trigger"
+              onClick={() => setShowStats(true)}
+            >
+              Lihat statistik komunitas
+            </button>
+          )}
 
-      {!showStats && (
-        <button
-          className="app__stats-trigger"
-          onClick={() => setShowStats(true)}
-        >
-          📊 Lihat statistik komunitas
-        </button>
-      )}
-
-      {showStats && <StatsPanel onClose={() => setShowStats(false)} />}
+          {showStats && <StatsPanel onClose={() => setShowStats(false)} />}
+        </div>
+      </div>
     </div>
   );
 }
