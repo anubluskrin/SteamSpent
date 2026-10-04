@@ -15,7 +15,7 @@ function createStar(width) {
   );
   return {
     x: randomBetween(0, width * 1.1),
-    y: randomBetween(-100, -20),
+    y: randomBetween(100, -20),
     angle,
     speed: randomBetween(1, 20),
     length: randomBetween(900, 220),
