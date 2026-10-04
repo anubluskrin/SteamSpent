@@ -21,7 +21,7 @@ function getDiscountPercent(game) {
   return Math.round((1 - game.discountPrice / game.price) * 100);
 }
 
-function computeStats(games, totalGames, totalPrice) {
+function computeStats(games) {
   const freeCount = games.filter((g) => g.price === 0).length;
   const paidGames = games.filter((g) => g.price > 0);
 
@@ -47,128 +47,128 @@ export default function Receipt({ result }) {
     currency,
     games,
   } = result;
-  const { freeCount, mostExpensive, average } = computeStats(
-    games,
-    totalGames,
-    totalPrice
-  );
+  const { freeCount, mostExpensive, average } = computeStats(games);
   const [showDiscounted, setShowDiscounted] = useState(false);
 
   const displayedTotal = showDiscounted ? totalPriceAfterDiscount : totalPrice;
 
   return (
-    <div className="receipt">
-      <div className="receipt__header">
-        <div className="receipt__username">{username}</div>
-        <div className="receipt__count">{totalGames} game di library</div>
+    <div className="dashboard-results">
+      <div className="metric-grid">
+        <div className="card metric-card metric-card--primary">
+          <div className="metric-card__toprow">
+            <span className="metric-card__label">Total library</span>
+            <div className="metric-card__toggle">
+              <button
+                className={
+                  "metric-card__toggle-btn" +
+                  (!showDiscounted ? " is-active" : "")
+                }
+                onClick={() => setShowDiscounted(false)}
+              >
+                Normal
+              </button>
+              <button
+                className={
+                  "metric-card__toggle-btn" +
+                  (showDiscounted ? " is-active" : "")
+                }
+                onClick={() => setShowDiscounted(true)}
+              >
+                Diskon
+              </button>
+            </div>
+          </div>
+          <div className="metric-card__value metric-card__value--lg">
+            {formatPrice(displayedTotal, currency)}
+          </div>
+          <div className="metric-card__note">
+            {showDiscounted
+              ? "Estimasi kalau semua game dibeli ulang hari ini, pas semuanya lagi diskon"
+              : "Estimasi beli ulang dari nol hari ini — bukan harga waktu kamu beli dulu"}
+          </div>
+        </div>
+
+        {mostExpensive && (
+          <div className="card metric-card">
+            <span className="metric-card__label">Game termahal</span>
+            <div className="metric-card__value metric-card__value--sm">
+              {formatPrice(mostExpensive.price, currency)}
+            </div>
+            <div className="metric-card__note metric-card__note--truncate">
+              {mostExpensive.name}
+            </div>
+          </div>
+        )}
+
+        <div className="card metric-card">
+          <span className="metric-card__label">Rata-rata harga</span>
+          <div className="metric-card__value metric-card__value--sm">
+            {formatPrice(Math.round(average), currency)}
+          </div>
+          <div className="metric-card__note">per game berbayar</div>
+        </div>
+
+        <div className="card metric-card">
+          <span className="metric-card__label">Game gratis</span>
+          <div className="metric-card__value metric-card__value--sm">
+            {freeCount}
+            <span className="metric-card__value-of">/{totalGames}</span>
+          </div>
+          <div className="metric-card__note">dari total library</div>
+        </div>
       </div>
 
-      <div className="receipt__items">
-        {games.map((game) => {
-          const discountPercent = getDiscountPercent(game);
-          const showItemDiscount = showDiscounted && discountPercent;
-          return (
-            <div className="receipt__item" key={game.appid}>
-              <img
-                src={game.coverUrl}
-                alt={game.name}
-                className="receipt__item-cover"
-                loading="lazy"
-                onError={(e) => {
-                  e.target.style.visibility = "hidden";
-                }}
-              />
-              <span className="receipt__item-name">{game.name}</span>
-              {showItemDiscount && (
-                <span className="receipt__item-discount">
-                  -{discountPercent}%
-                </span>
-              )}
-              <span className="receipt__item-price-group">
+      <div className="card game-table">
+        <div className="game-table__header">
+          <span className="game-table__username">{username}</span>
+          <span className="game-table__count">{totalGames} game</span>
+        </div>
+
+        <div className="game-table__body">
+          {games.map((game) => {
+            const discountPercent = getDiscountPercent(game);
+            const showItemDiscount = showDiscounted && discountPercent;
+            return (
+              <div className="game-table__row" key={game.appid}>
+                <img
+                  src={game.coverUrl}
+                  alt={game.name}
+                  className="game-table__cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.style.visibility = "hidden";
+                  }}
+                />
+                <span className="game-table__name">{game.name}</span>
                 {showItemDiscount && (
-                  <span className="receipt__item-price-original">
-                    {formatPrice(game.price, game.currency)}
+                  <span className="game-table__discount">
+                    -{discountPercent}%
                   </span>
                 )}
-                <span
-                  className={
-                    "receipt__item-price" +
-                    (game.isFree ? " receipt__item-price--free" : "")
-                  }
-                >
-                  {formatPrice(
-                    showItemDiscount ? game.discountPrice : game.price,
-                    game.currency
+                <span className="game-table__price-group">
+                  {showItemDiscount && (
+                    <span className="game-table__price-original">
+                      {formatPrice(game.price, game.currency)}
+                    </span>
                   )}
+                  <span
+                    className={
+                      "game-table__price" +
+                      (game.isFree ? " game-table__price--free" : "")
+                    }
+                  >
+                    {formatPrice(
+                      showItemDiscount ? game.discountPrice : game.price,
+                      game.currency
+                    )}
+                  </span>
                 </span>
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="receipt__total">
-        <div className="receipt__toggle">
-          <button
-            className={
-              "receipt__toggle-btn" + (!showDiscounted ? " is-active" : "")
-            }
-            onClick={() => setShowDiscounted(false)}
-          >
-            Harga normal
-          </button>
-          <button
-            className={
-              "receipt__toggle-btn" + (showDiscounted ? " is-active" : "")
-            }
-            onClick={() => setShowDiscounted(true)}
-          >
-            Kalau lagi diskon
-          </button>
-        </div>
-
-        <div className="receipt__total-row">
-          <span className="receipt__total-label">Total</span>
-          <span className="receipt__total-value">
-            {formatPrice(displayedTotal, currency)}
-          </span>
-        </div>
-        <div className="receipt__total-note">
-          {showDiscounted
-            ? "Estimasi kalau semua game dibeli ulang hari ini, pas semuanya lagi diskon seperti sekarang"
-            : "Estimasi kalau semua game ini dibeli ulang dari nol hari ini — bukan harga waktu kamu beli dulu"}
+              </div>
+            );
+          })}
         </div>
       </div>
-
-      {mostExpensive && (
-        <div className="receipt__stats">
-          <div className="receipt__stat">
-            <span className="receipt__stat-label">Game termahal</span>
-            <span className="receipt__stat-value">
-              <span className="receipt__stat-name">
-                {mostExpensive.name}
-              </span>{" "}
-              <span className="receipt__stat-price">
-                {formatPrice(mostExpensive.price, currency)}
-              </span>
-            </span>
-          </div>
-          <div className="receipt__stat">
-            <span className="receipt__stat-label">
-              Rata-rata harga (game berbayar)
-            </span>
-            <span className="receipt__stat-value">
-              {formatPrice(Math.round(average), currency)}
-            </span>
-          </div>
-          <div className="receipt__stat">
-            <span className="receipt__stat-label">Game gratis</span>
-            <span className="receipt__stat-value">
-              {freeCount} dari {totalGames} game
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

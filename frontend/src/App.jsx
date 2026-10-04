@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Landing from "./components/Landing.jsx";
+import TopBar from "./components/TopBar.jsx";
 import SearchForm from "./components/SearchForm.jsx";
 import Receipt from "./components/Receipt.jsx";
 import LoadingReceipt from "./components/LoadingReceipt.jsx";
@@ -34,25 +35,29 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="app__title">Steam Library Total</h1>
-      <p className="app__subtitle">
-        Seandainya kamu beli ulang semua game di library Steam-mu hari ini,
-        dari nol — berapa totalnya? Masukkan username buat cari tau.
-      </p>
+      <TopBar />
 
-      <SearchForm onSearch={handleSearch} isLoading={isLoading} />
+      <div className="card search-card">
+        <h1 className="app__title">Steam Library Total</h1>
+        <p className="app__subtitle">
+          Seandainya kamu beli ulang semua game di library Steam-mu hari
+          ini, dari nol — berapa totalnya? Masukkan username buat cari tau.
+        </p>
 
-      <p className="app__hint">
-        Tidak punya link custom (steamcommunity.com/id/...)? Paste saja link
-        profil Steam kamu apa adanya.
-      </p>
+        <SearchForm onSearch={handleSearch} isLoading={isLoading} />
+
+        <p className="app__hint">
+          Tidak punya link custom (steamcommunity.com/id/...)? Paste saja
+          link profil Steam kamu apa adanya.
+        </p>
+      </div>
 
       <div className="app__body">
         <div className="app__main">
           {isLoading && <LoadingReceipt />}
 
           {error && (
-            <div className="state-message state-message--error">
+            <div className="card state-message state-message--error">
               <p>{error}</p>
               {error.includes("tidak ditemukan") && (
                 <a

@@ -27,7 +27,7 @@ export default function StatsPanel({ onClose }) {
     : 1;
 
   return (
-    <div className="stats-panel">
+    <div className="card stats-panel">
       <div className="stats-panel__header">
         <h2 className="stats-panel__title">Statistik Komunitas</h2>
         <button className="stats-panel__close" onClick={onClose}>
@@ -37,9 +37,7 @@ export default function StatsPanel({ onClose }) {
 
       {error && <p className="state-message state-message--error">{error}</p>}
 
-      {!stats && !error && (
-        <p className="state-message">Memuat statistik…</p>
-      )}
+      {!stats && !error && <p className="state-message">Memuat statistik…</p>}
 
       {stats && (
         <>
