@@ -11,13 +11,13 @@ function randomBetween(min, max) {
 function createStar(width) {
   const angle = randomBetween(
     (110 * Math.PI) / 180,
-    (130 * Math.PI) / 180
+    (111 * Math.PI) / 180
   );
   return {
-    x: randomBetween(0, width * 10.1),
+    x: randomBetween(0, width * 1.1),
     y: randomBetween(-100, -20),
     angle,
-    speed: randomBetween(1, 5),
+    speed: randomBetween(1, 20),
     length: randomBetween(900, 220),
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
     opacity: randomBetween(0.6, 1),
