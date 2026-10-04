@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-const COLORS = ["#5eead4", "#a78bfa", "#72f47d", "#2444fb", "#60a5fa"];
-const MAX_STARS = 5500;
+const COLORS = ["#5eead4", "#a78bfa", "#0089e4", "#2444fb", "#60a5fa"];
+const MAX_STARS = 500;
 const SPAWN_INTERVAL = 90; // ms antar kemunculan bintang baru
 
 function randomBetween(min, max) {
@@ -14,7 +14,7 @@ function createStar(width) {
     (130 * Math.PI) / 180
   );
   return {
-    x: randomBetween(0, width * 1.1),
+    x: randomBetween(0, width * 10.1),
     y: randomBetween(-100, -20),
     angle,
     speed: randomBetween(1, 5),
