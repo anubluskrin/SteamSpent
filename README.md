@@ -1,6 +1,6 @@
 # Steamspent
 
-Aplikasi web yang menghitung total harga penuh (tanpa diskon) dari seluruh game di library Steam seorang user, cukup dengan input username/link profil Steam.
+Aplikasi web yang menghitung total harga berdasarkan harga currently bukan ketika user cekout, dari seluruh game di library Steam seorang user, cukup dengan input username/link profil Steam.
 
 **Demo:** https://steam-spent.vercel.app
 
