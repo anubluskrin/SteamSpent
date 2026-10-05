@@ -3,7 +3,6 @@ import { getPricesForGames } from "../src/services/steamPrice.service.js";
 import { prisma } from "../lib/prisma.js";
 
 export default async function handler(req, res) {
-  // CORS: izinkan diakses dari domain frontend Vercel kamu
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -24,8 +23,12 @@ export default async function handler(req, res) {
 
   try {
     const steamId64 = await resolveToSteamId64(username);
-    const games = await getOwnedGames(steamId64);
-    const gamesWithPrices = await getPricesForGames(games);
+    const allGames = await getOwnedGames(steamId64);
+
+    // Tidak ada batas jumlah game tetap — getPricesForGames berhenti
+    // otomatis sendiri kalau mendekati batas waktu serverless function.
+    const { results: gamesWithPrices, stoppedEarly } =
+      await getPricesForGames(allGames);
 
     const total = gamesWithPrices.reduce((sum, g) => sum + g.price, 0);
     const totalAfterDiscount = gamesWithPrices.reduce(
@@ -33,16 +36,20 @@ export default async function handler(req, res) {
       0
     );
 
-    prisma.searchLog
-      .create({
+    try {
+      await prisma.searchLog.create({
         data: { steamId64, vanityName: username, totalPrice: total },
-      })
-      .catch(() => {});
+      });
+    } catch (logErr) {
+      console.error("Gagal catat search log:", logErr);
+    }
 
     return res.status(200).json({
       username,
       steamId64,
-      totalGames: gamesWithPrices.length,
+      totalGames: allGames.length,
+      pricedGames: gamesWithPrices.length,
+      isTruncated: stoppedEarly,
       totalPrice: total,
       totalPriceAfterDiscount: totalAfterDiscount,
       currency: gamesWithPrices[0]?.currency ?? "IDR",
