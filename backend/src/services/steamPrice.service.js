@@ -8,6 +8,7 @@ import {
 const STORE_URL = "https://store.steampowered.com/api/appdetails";
 const BATCH_SIZE = 20; // jumlah game yang diproses bersamaan per batch
 const BATCH_DELAY_MS = 120; // jeda antar batch (bukan antar game satu-satu lagi)
+const TIME_BUDGET_MS = 55000; // berhenti proses game baru setelah 45 detik
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -24,7 +25,6 @@ async function fetchPriceFromStore(appid, cc = "id") {
   const entry = data[appid];
 
   if (!entry || !entry.success) {
-    // Game tidak ditemukan / sudah dihapus dari store
     return { price: 0, discountPrice: null, currency: "IDR", isFree: false };
   }
 
@@ -35,12 +35,11 @@ async function fetchPriceFromStore(appid, cc = "id") {
   }
 
   if (!details.price_overview) {
-    // Game berbayar tapi entah kenapa tidak ada info harga (jarang terjadi)
     return { price: 0, discountPrice: null, currency: "IDR", isFree: false };
   }
 
   return {
-    price: details.price_overview.initial / 100, // Steam kasih harga dalam sen
+    price: details.price_overview.initial / 100,
     discountPrice: details.price_overview.final / 100,
     currency: details.price_overview.currency,
     isFree: false,
@@ -60,7 +59,7 @@ async function processGame(game) {
     wasFetchedFresh = true;
   }
 
-  incrementTimesSeen(game.appid); // tidak di-await, tidak menghambat response utama
+  await incrementTimesSeen(game.appid);
 
   return {
     result: {
@@ -79,14 +78,22 @@ async function processGame(game) {
 }
 
 /**
- * Ambil harga untuk banyak game sekaligus, diproses per-batch (paralel)
- * supaya jauh lebih cepat dibanding satu-satu, tapi tetap ada jeda
- * antar batch supaya tidak membanjiri Steam Store API sekaligus.
+ * Ambil harga untuk banyak game sekaligus, diproses per-batch (paralel),
+ * berhenti otomatis kalau sudah mendekati batas waktu function serverless
+ * (bukan dibatasi jumlah game tetap) — supaya akun yang sebagian besar
+ * game-nya sudah ke-cache tetap bisa diproses penuh walau jumlahnya besar.
  */
 export async function getPricesForGames(games) {
   const results = [];
+  const startTime = Date.now();
+  let stoppedEarly = false;
 
   for (let i = 0; i < games.length; i += BATCH_SIZE) {
+    if (Date.now() - startTime > TIME_BUDGET_MS) {
+      stoppedEarly = true;
+      break;
+    }
+
     const batch = games.slice(i, i + BATCH_SIZE);
     const batchResults = await Promise.all(batch.map(processGame));
 
@@ -96,11 +103,10 @@ export async function getPricesForGames(games) {
       if (wasFetchedFresh) anyFetchedFresh = true;
     }
 
-    // Jeda cuma kalau batch ini beneran hit Steam Store API (bukan full cache)
     if (anyFetchedFresh && i + BATCH_SIZE < games.length) {
       await sleep(BATCH_DELAY_MS);
     }
   }
 
-  return results;
+  return { results, stoppedEarly };
 }
